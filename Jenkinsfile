@@ -37,11 +37,13 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-                sh """
-                  aws eks update-kubeconfig --name trendstore --region ap-south-1
-				  kubectl apply -f deployment.yml 
-				  kubectl apply -f service.yml 
-                """
+				withAWS(credentials: 'aws-creds', region: 'ap-south-1') {
+	                sh """
+	                  aws eks update-kubeconfig --name trendstore --region ap-south-1
+					  kubectl apply -f deployment.yml 
+					  kubectl apply -f service.yml 
+	                """
+				}
 		}
 	  }
 	}
